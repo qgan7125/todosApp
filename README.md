@@ -4,7 +4,7 @@
 - Database: MySQL
 
 ## Configuration
-Please create a `.env` file before start server.
+Please create a `.env` file before starting server.
 
 `.env` example
 ```
