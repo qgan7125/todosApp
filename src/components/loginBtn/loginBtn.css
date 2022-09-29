@@ -1,0 +1,22 @@
+.LoginBtn__container {
+    position: absolute;
+    right: 20px;
+    top: 0;
+}
+
+.LoginBtn__container button {
+    padding: 10px 15px;
+    background-color: var(--color-blue);
+    color: white;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 6px;
+}
+
+.LoginBtn__container button:active {
+    transform: scale(0.95);
+}
+
+.LoginBtn__container button:hover {
+    opacity: 0.7;
+}

@@ -39,7 +39,7 @@ const Todos = () => {
         const { id } = e.target.parentElement;
 
         deleteTodo(id, (res) => {
-            const idx = todos.findIndex(todo => +todo.id === +res.id);
+            const idx = todos.findIndex(todo => +todo.id === +id);
             setTodos(prev => [...prev.slice(0, idx), ...prev.slice(idx + 1)]);
             console.log(res.message)
         })
@@ -81,7 +81,6 @@ const Todos = () => {
 
     return (
         <div className="todo__container" >
-            <header><h3>Todo list</h3></header>
             <form className='todo__form' onSubmit={handleSubmit}>
                 <div className='todo__form--inputGroup'>
                     <input onChange={handleInput} value={input} />
