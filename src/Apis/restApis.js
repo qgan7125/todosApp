@@ -12,22 +12,32 @@ const headers = cookies.get("jwt") ? {
 };
 
 export const getTodos = async (callback, api = API) => {
-    fetch(api, {
+    return fetch(api, {
         method: "GET",
         headers: headers
     })
         .then(res => res.json())
-        .then(res => callback(res));
+        .then(res => {
+            if(callback) {
+                callback(res);
+            }
+            return res;
+        });
 }
 
-export const addTodo = async (callback, content, api = API) => {
+export const addTodo = async (content, callback, api = API) => {
     return fetch(API, {
         method: "POST",
         headers: headers,
         body: JSON.stringify(content)
     })
         .then(res => res.json())
-        .then(res => callback(res));
+        .then(res => {
+            if(callback) {
+                callback(res);
+            }
+            return res;
+        });
 }
 
 export const deleteTodo = async (id, callback, api = API) => {
@@ -37,7 +47,10 @@ export const deleteTodo = async (id, callback, api = API) => {
     })
         .then(res => res.json())
         .then(res => {
-            callback(res);
+            if(callback) {
+                callback(res);
+            }
+            return res;
         })
 }
 
@@ -48,5 +61,10 @@ export const patchTodo = async (id, content, callback, api = API) => {
         body: JSON.stringify(content)
     })
         .then(res => res.json())
-        .then(res => callback(res));
+        .then(res => {
+            if(callback) {
+                callback(res);
+            }
+            return res;
+        });
 }
