@@ -40,3 +40,8 @@ Please run TodoApplication.java
 ```
 npm start
 ```
+
+### Generate jwt sectrete 
+```
+require('crypto').randomBytes(256).toString('base64')
+```

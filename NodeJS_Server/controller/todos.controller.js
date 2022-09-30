@@ -1,8 +1,37 @@
+require("dotenv").config();
+
 const db = require("../models");
+const jwt = require("jsonwebtoken");
 const Todos = db.Todos;
-const Op = db.Sequelize.Op;
+
+exports.verifyToken = (req, res, next) => {
+    let token = req.headers.authorization;
+
+    if (!token) {
+        next();
+        return
+    }
+
+    try {
+        token = token.split(" ")[1];
+
+        if (token === null || !token) return res.status(401).send('Unauthorized request');
+
+        const verifiedUser = jwt.verify(token, process.env.JWT_ACCESS_TOKEN);
+
+        if (!verifiedUser) return res.status(401).send('Unauthorized request')
+
+        req.user = verifiedUser;
+        next();
+    } catch (err) {
+        next();
+    }
+
+}
 
 exports.create = (req, res) => {
+    const { user } = req;
+
     if (!req.body) {
         res.status(400).send({ message: "Body cannot be empty!" });
         return;
@@ -13,7 +42,8 @@ exports.create = (req, res) => {
     const Todo = {
         content,
         isCompleted,
-        isEdit
+        isEdit,
+        UserId: user ? user.userID : null,
     };
 
     Todos.create(Todo)
@@ -28,7 +58,9 @@ exports.create = (req, res) => {
 }
 
 exports.findAll = (req, res) => {
-    Todos.findAll()
+    const { user } = req;
+
+    Todos.findAll({ where:  { UserId: user ? user.userID : null } })
         .then(data => {
             res.send({ data });
         })
@@ -42,12 +74,13 @@ exports.findAll = (req, res) => {
 
 exports.update = (req, res) => {
     const { id } = req.params;
+    const { user } = req;
 
     Todos.update(req.body, {
-        where: { id: id }
+        where: { id: id, UserId: user ? user.userID : null }
     })
         .then(num => {
-            if (num == 1) {
+            if (num == 0) {
                 res.send({
                     message: "Todo was updated successfully!"
                 })
@@ -66,8 +99,9 @@ exports.update = (req, res) => {
 
 exports.delete = (req, res) => {
     const { id } = req.params;
+    const { user } = req;
 
-    Todos.destroy({ where: { id: id } })
+    Todos.destroy({ where: { id: id, UserId: user ? user.userID : null } })
         .then(num => {
             if (num == 1) {
                 res.send({

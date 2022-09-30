@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Cookies from 'universal-cookie';
 import { getTodos, addTodo, deleteTodo, patchTodo } from '../../Apis/restApis';
 import TodoItem from '../todoItem';
 import "./todo.css";
@@ -6,6 +7,8 @@ import "./todo.css";
 const Todos = () => {
     const [todos, setTodos] = useState([]);
     const [input, setInput] = useState("");
+    const cookies = new Cookies();
+    const [auth, setAuth] = useState(cookies.get('jwt'));
 
     useEffect(() => {
         getTodos((res) => {
@@ -13,6 +16,13 @@ const Todos = () => {
             setTodos(res.data);
         });
     }, [])
+
+    useEffect(() => {
+        const cookies = new Cookies();
+        if (auth !== cookies.get('jwt')) {
+            setAuth(cookies.get('jwt'));
+        }
+    }, [auth]);
 
     const handleInput = (e) => {
         const { value } = e.target;

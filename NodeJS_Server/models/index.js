@@ -25,13 +25,27 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 db.Todos = require("./todos.model")(sequelize, Sequelize);
+db.Users = require("./users.model")(sequelize, Sequelize);
 
-db.sequelize.sync()
-    .then(() => {
-        console.log("Synced db.");
-    })
-    .catch((err) => {
-        console.log("Failed to sync db: " + err.message);
-    });
+db.Users.hasMany(db.Todos);
+
+const main = async () => {
+    try {
+        await db.sequelize.authenticate()
+        console.log('Connection has been established successfully.');
+        await db.sequelize.sync()
+            .then(() => {
+                console.log("Synced db.");
+            })
+            .catch((err) => {
+                console.log("Failed to sync db: " + err.message);
+            });
+    } catch (error) {
+        console.error('Unable to connect to the database:', error)
+    }
+}
+
+main();
+
 
 module.exports = db;

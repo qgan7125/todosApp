@@ -3,13 +3,13 @@ module.exports = express => {
 
     const router = express.Router();
 
-    router.get("/", TodosController.findAll);
+    router.get("/", TodosController.verifyToken, TodosController.findAll);
 
-    router.post("/", TodosController.create);
+    router.post("/", TodosController.verifyToken, TodosController.create);
 
-    router.patch("/:id", TodosController.update);
+    router.patch("/:id", TodosController.verifyToken, TodosController.update);
 
-    router.delete("/:id", TodosController.delete);
+    router.delete("/:id", TodosController.verifyToken, TodosController.delete);
 
     return router;
 }

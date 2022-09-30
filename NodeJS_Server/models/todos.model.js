@@ -16,7 +16,10 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.BOOLEAN,
             defaultValue: false
         }
-    })
+    },
+        {
+            timestamps: false
+        })
 
     return Todos;
 }

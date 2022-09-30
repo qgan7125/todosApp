@@ -1,15 +1,29 @@
+import Cookies from "universal-cookie";
+
 const API = "http://localhost:8080/todo";
 
+const cookies = new Cookies();
+
+const headers = cookies.get("jwt") ? {
+    'Content-Type': 'application/json',
+    "authorization": cookies.get("jwt")
+} : {
+    'Content-Type': 'application/json'
+};
+
 export const getTodos = async (callback, api = API) => {
-    fetch(api)
-    .then(res => res.json())
-    .then(res => callback(res));
+    fetch(api, {
+        method: "GET",
+        headers: headers
+    })
+        .then(res => res.json())
+        .then(res => callback(res));
 }
 
 export const addTodo = async (callback, content, api = API) => {
     return fetch(API, {
         method: "POST",
-        headers: { 'Content-Type': 'application/json' },
+        headers: headers,
         body: JSON.stringify(content)
     })
         .then(res => res.json())
@@ -17,21 +31,22 @@ export const addTodo = async (callback, content, api = API) => {
 }
 
 export const deleteTodo = async (id, callback, api = API) => {
-    return fetch(API +"/" + id, {
-        method: "DELETE"
+    return fetch(API + "/" + id, {
+        method: "DELETE",
+        headers: headers
     })
-    .then(res => res.json())
-    .then(res => {
-        callback(res);
-    })
+        .then(res => res.json())
+        .then(res => {
+            callback(res);
+        })
 }
 
-export const patchTodo = async (id, content, callback, api= API) => {
+export const patchTodo = async (id, content, callback, api = API) => {
     return fetch(API + "/" + id, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: headers,
         body: JSON.stringify(content)
     })
-    .then(res => res.json())
-    .then(res => callback(res));
+        .then(res => res.json())
+        .then(res => callback(res));
 }
