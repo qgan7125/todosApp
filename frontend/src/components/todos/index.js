@@ -37,13 +37,13 @@ const Todos = () => {
     const handleToggle = (e) => {
         const { id } = e.target.parentElement;
         const idx = todos.findIndex(todo => +todo.id === +id);
-        const newData = { ...todos[idx], isComplete: !todos[idx]["isComplete"] };
+        const newData = { ...todos[idx], isCompleted: !todos[idx]["isCompleted"] };
 
         dispatch(updateById({id, newData}));
     }
 
-    const active = [...todos]?.sort((a, b) => +b.id - +a.id).filter((todo) => !todo.isComplete);
-    const completed = [...todos]?.sort((a, b) => +b.id - +a.id).filter((todo) => todo.isComplete);
+    const active = [...todos]?.sort((a, b) => +b.id - +a.id).filter((todo) => !todo.isCompleted);
+    const completed = [...todos]?.sort((a, b) => +b.id - +a.id).filter((todo) => todo.isCompleted);
 
     return (
         <div className="todo__container" >

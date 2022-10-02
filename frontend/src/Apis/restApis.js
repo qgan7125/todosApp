@@ -2,23 +2,28 @@ import Cookies from "universal-cookie";
 
 const API = "http://localhost:8080/todo";
 
-const cookies = new Cookies();
 
-const headers = cookies.get("jwt") ? {
-    'Content-Type': 'application/json',
-    "authorization": cookies.get("jwt")
-} : {
-    'Content-Type': 'application/json'
-};
+
+const headers = () => {
+
+    const cookies = new Cookies();
+    return cookies.get("jwt") ? {
+        'Content-Type': 'application/json',
+        "authorization": cookies.get("jwt")
+    } : {
+        'Content-Type': 'application/json'
+    };
+}
+
 
 export const getTodos = async (callback, api = API) => {
     return fetch(api, {
         method: "GET",
-        headers: headers
+        headers: headers()
     })
         .then(res => res.json())
         .then(res => {
-            if(callback) {
+            if (callback) {
                 callback(res);
             }
             return res;
@@ -28,12 +33,12 @@ export const getTodos = async (callback, api = API) => {
 export const addTodo = async (content, callback, api = API) => {
     return fetch(API, {
         method: "POST",
-        headers: headers,
+        headers: headers(),
         body: JSON.stringify(content)
     })
         .then(res => res.json())
         .then(res => {
-            if(callback) {
+            if (callback) {
                 callback(res);
             }
             return res;
@@ -43,11 +48,11 @@ export const addTodo = async (content, callback, api = API) => {
 export const deleteTodo = async (id, callback, api = API) => {
     return fetch(API + "/" + id, {
         method: "DELETE",
-        headers: headers
+        headers: headers()
     })
         .then(res => res.json())
         .then(res => {
-            if(callback) {
+            if (callback) {
                 callback(res);
             }
             return res;
@@ -57,12 +62,12 @@ export const deleteTodo = async (id, callback, api = API) => {
 export const patchTodo = async (id, content, callback, api = API) => {
     return fetch(API + "/" + id, {
         method: "PATCH",
-        headers: headers,
+        headers: headers(),
         body: JSON.stringify(content)
     })
         .then(res => res.json())
         .then(res => {
-            if(callback) {
+            if (callback) {
                 callback(res);
             }
             return res;
